@@ -23,8 +23,10 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>CallTap records your side of the call from the microphone.</string>
+	<string>CallTap records your voice from the microphone.</string>
 	<key>NSAudioCaptureUsageDescription</key>
-	<string>CallTap records the other side of the call from WhatsApp's audio.</string>
+	<string>CallTap records the audio of the call or app you choose.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>CallTap transcribes recordings on this Mac.</string>
 </dict>
 </plist>

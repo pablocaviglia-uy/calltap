@@ -1,7 +1,7 @@
 import AppKit
 import UserNotifications
 
-/// "WhatsApp call — Record" when a call starts, and "Call recorded" when the file is saved.
+/// "<App> call — Record" when a call starts; "Recording saved" and "Transcript ready" afterwards.
 final class CallNotifier: NSObject, UNUserNotificationCenterDelegate {
     static let recordAction = "record"
     private static let callCategory = "call"
@@ -19,9 +19,9 @@ final class CallNotifier: NSObject, UNUserNotificationCenterDelegate {
         center.requestAuthorization(options: [.alert, .sound]) { _, _ in }
     }
 
-    func callStarted() {
+    func callStarted(appName: String) {
         let content = UNMutableNotificationContent()
-        content.title = "WhatsApp call"
+        content.title = "\(appName) call"
         content.body = "Record it? Let the other person know first."
         content.categoryIdentifier = Self.callCategory
         center.add(UNNotificationRequest(identifier: Self.callRequest, content: content, trigger: nil))
@@ -31,17 +31,17 @@ final class CallNotifier: NSObject, UNUserNotificationCenterDelegate {
         center.removeDeliveredNotifications(withIdentifiers: [Self.callRequest])
     }
 
-    func saved(_ url: URL) {
+    func fileReady(title: String, url: URL) {
         let content = UNMutableNotificationContent()
-        content.title = "Call recorded"
+        content.title = title
         content.body = url.lastPathComponent
         content.userInfo = ["path": url.path]
-        center.add(UNNotificationRequest(identifier: "saved-\(UUID().uuidString)", content: content, trigger: nil))
+        center.add(UNNotificationRequest(identifier: "file-\(UUID().uuidString)", content: content, trigger: nil))
     }
 
-    func failed(_ message: String) {
+    func failed(_ title: String, _ message: String) {
         let content = UNMutableNotificationContent()
-        content.title = "Recording failed"
+        content.title = title
         content.body = message
         center.add(UNNotificationRequest(identifier: "failed-\(UUID().uuidString)", content: content, trigger: nil))
     }
